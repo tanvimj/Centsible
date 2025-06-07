@@ -1,2 +1,2 @@
 # Centsible
-A firebase - aided finance tracking website.
+A firebase-aided finance tracking website.
