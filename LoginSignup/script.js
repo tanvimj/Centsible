@@ -3,7 +3,7 @@ const actionButton = document.getElementById('action-button');
 const welcomeText = document.getElementById('welcome-text');
 const form = document.getElementById('auth-form');
 
-let isSignUp = true; // start with Sign Up
+let isSignUp = true; 
 
 switchButton.addEventListener('click', () => {
   isSignUp = !isSignUp;
@@ -53,13 +53,12 @@ fetch('/login', {
 });
 
 document.getElementById('auth-form').addEventListener('submit', async function (e) {
-  e.preventDefault(); // stop form from submitting normally (no page reload)
+  e.preventDefault();
 
   const email = document.getElementById('email-input').value;
   const password = document.getElementById('password-input').value;
 
-  // Adjust URL to '/signup' or '/login' depending on your current form mode
-  const endpoint = '/signup'; // or '/login'
+  const endpoint = '/signup';
 
   try {
     const response = await fetch(endpoint, {
@@ -71,10 +70,8 @@ document.getElementById('auth-form').addEventListener('submit', async function (
     const text = await response.text();
 
     if (response.ok) {
-      // Successful signup/login - redirect
-      window.location.href = 'MainPage/index.html'; // relative path from current page
+      window.location.href = 'MainPage/index.html'; 
     } else {
-      // Show error message (you can replace this with your UI logic)
       alert(text);
     }
   } catch (error) {
