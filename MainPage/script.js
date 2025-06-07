@@ -1,4 +1,3 @@
-// Import Firebase modules
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.1/firebase-app.js";
 import {
   getAuth,
@@ -17,7 +16,6 @@ import {
   updateDoc,
 } from "https://www.gstatic.com/firebasejs/10.12.1/firebase-firestore.js";
 
-// Firebase config
 const firebaseConfig = {
   apiKey: "AIzaSyCg9Hyp3egqKyb4YJCVHJDJcxFyYEvrroI",
   authDomain: "centsible-40125.firebaseapp.com",
@@ -28,12 +26,10 @@ const firebaseConfig = {
   measurementId: "G-1JVNDTB627",
 };
 
-// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-// DOM Elements
 const amountInput = document.getElementById("amount");
 const categoryInput = document.getElementById("category");
 const modeInput = document.getElementById("mode");
@@ -42,7 +38,6 @@ const tableContainer = document.querySelector(".table-container");
 const closeTableBtn = document.getElementById("close-table-btn");
 const showTableBtn = document.getElementById("show-table-btn");
 
-// Chat functionality - DOM Elements
 const chatTrigger = document.getElementById('chat-trigger');
 const floatingChatBtn = document.getElementById('floating-chat-btn');
 const chatWindow = document.getElementById('chat-window');
@@ -51,11 +46,9 @@ const chatInput = document.getElementById('chat-input');
 const chatSend = document.getElementById('chat-send');
 const chatMessages = document.getElementById('chat-messages');
 
-// Chat functionality - Functions
 function openChat() {
   if (chatWindow) {
     chatWindow.style.display = 'flex';
-    // Hide the floating elements when chat is open
     const chatCont = document.querySelector('.chat-cont');
     if (chatCont) chatCont.style.display = 'none';
     if (floatingChatBtn) floatingChatBtn.style.display = 'none';
@@ -65,7 +58,6 @@ function openChat() {
 function closeChat() {
   if (chatWindow) {
     chatWindow.style.display = 'none';
-    // Show the floating elements when chat is closed
     const chatCont = document.querySelector('.chat-cont');
     if (chatCont) chatCont.style.display = 'flex';
     if (floatingChatBtn) floatingChatBtn.style.display = 'block';
@@ -77,16 +69,13 @@ function sendMessage() {
   
   const message = chatInput.value.trim();
   if (message) {
-    // Add user message
     const userMessage = document.createElement('div');
     userMessage.className = 'chat-message user';
     userMessage.textContent = message;
     chatMessages.appendChild(userMessage);
 
-    // Clear input
     chatInput.value = '';
 
-    // Simulate bot response
     setTimeout(() => {
       const botMessage = document.createElement('div');
       botMessage.className = 'chat-message bot';
@@ -99,19 +88,16 @@ function sendMessage() {
   }
 }
 
-// Show table when button clicked
 showTableBtn?.addEventListener("click", () => {
   tableContainer.style.display = "block";
   showTableBtn.style.display = "none";
 });
 
-// Close table when close button clicked
 closeTableBtn?.addEventListener("click", () => {
   tableContainer.style.display = "none";
   showTableBtn.style.display = "inline-block";
 });
 
-// Listen for Auth State
 onAuthStateChanged(auth, async (user) => {
   if (user) {
     console.log("Logged in as:", user.email);
@@ -120,38 +106,28 @@ onAuthStateChanged(auth, async (user) => {
     window.location.href = "/LoginSignup/index.html";
   }
 });
-// Remove the duplicate import and replace the budget click handler with:
 
 document.getElementById('budget')?.addEventListener('click', () => {
-  // Check if user is currently authenticated
   const user = auth.currentUser;
   
   if (user) {
-    // ✅ User is logged in, redirect to budget page
     window.location.href = "/BudgetPage/index.html";
   } else {
-    // ❌ User is not logged in, redirect to login page
     window.location.href = "/LoginSignup/index.html";
   }
 });
 
-// Alternative approach if you want to wait for auth state to be determined:
 document.getElementById('budget')?.addEventListener('click', () => {
-  // Create a one-time auth state check
   const unsubscribe = onAuthStateChanged(auth, (user) => {
     if (user) {
-      // ✅ User is logged in, redirect to budget page
       window.location.href = "/BudgetPage/index.html";
     } else {
-      // ❌ User is not logged in, redirect to login page
       window.location.href = "/LoginSignup/index.html";
     }
-    // Unsubscribe immediately after checking
     unsubscribe();
   });
 });
 
-// Add Expense
 addExpenseBtn?.addEventListener("click", async () => {
   const user = auth.currentUser;
   const amount = parseFloat(amountInput.value);
@@ -182,7 +158,6 @@ addExpenseBtn?.addEventListener("click", async () => {
   }
 });
 
-// Load Expenses and setup table + charts
 async function loadExpenses(uid) {
   const expensesRef = collection(db, "expenses", uid, "records");
   const q = query(expensesRef, orderBy("date", "desc"));
@@ -242,7 +217,6 @@ async function loadExpenses(uid) {
       tableBody.appendChild(tr);
     });
 
-    // Attach event listeners for Delete buttons
     document.querySelectorAll(".delete-btn").forEach((btn) => {
       btn.addEventListener("click", async (e) => {
         const docId = e.currentTarget.getAttribute("data-id");
@@ -250,7 +224,6 @@ async function loadExpenses(uid) {
       });
     });
 
-    // Attach event listeners for Edit buttons
     document.querySelectorAll(".edit-btn").forEach((btn) => {
       btn.addEventListener("click", (e) => {
         const row = e.currentTarget.closest("tr");
@@ -260,8 +233,6 @@ async function loadExpenses(uid) {
         row.querySelector(".save-btn").style.display = "inline";
       });
     });
-
-    // Attach event listeners for Save buttons
     document.querySelectorAll(".save-btn").forEach((btn) => {
       btn.addEventListener("click", async (e) => {
         const docId = e.currentTarget.getAttribute("data-id");
@@ -286,7 +257,7 @@ async function loadExpenses(uid) {
             mode: newMode,
           });
 
-          await loadExpenses(uid); // Refresh data and UI after update
+          await loadExpenses(uid); 
         } catch (error) {
           console.error("Error updating expense:", error);
         }
@@ -294,7 +265,6 @@ async function loadExpenses(uid) {
     });
   }
 
-  // Prepare array for chart updates
   const expensesArray = [];
   querySnapshot.forEach((docSnap) => {
     const data = docSnap.data();
@@ -306,11 +276,9 @@ async function loadExpenses(uid) {
     });
   });
 
-  // Update charts with the data
   updateCharts(expensesArray);
 }
 
-// Delete Expense function
 async function deleteExpense(uid, docId) {
   try {
     const expenseDoc = doc(db, "expenses", uid, "records", docId);
@@ -321,7 +289,6 @@ async function deleteExpense(uid, docId) {
   }
 }
 
-// Format number as INR currency
 function formatINR(value) {
   return new Intl.NumberFormat("en-IN", {
     style: "currency",
@@ -330,7 +297,6 @@ function formatINR(value) {
   }).format(value);
 }
 
-// Generate random finance summary for display
 function generateRandomFinanceSummary() {
   const income = Math.floor(Math.random() * 90000) + 10000; // ₹10k - ₹1L
   const outcome = Math.floor(Math.random() * income);
@@ -345,13 +311,11 @@ function generateRandomFinanceSummary() {
   if (box3) box3.textContent = `Monthly Savings: ${formatINR(savings)}`;
 }
 
-// Generate random summary on page load
 generateRandomFinanceSummary();
 
 let categoryChart = null;
 let trendChart = null;
 
-// Initialize charts once on page load
 function initializeCharts() {
   const ctx1 = document.getElementById("categoryChart");
   const ctx2 = document.getElementById("trendChart");
@@ -361,7 +325,6 @@ function initializeCharts() {
     return;
   }
 
-  // Category Doughnut Chart
   categoryChart = new Chart(ctx1.getContext("2d"), {
     type: "doughnut",
     data: {
@@ -400,7 +363,6 @@ function initializeCharts() {
     },
   });
 
-  // Cumulative Expenses Line Chart
   trendChart = new Chart(ctx2.getContext("2d"), {
     type: "line",
     data: {
@@ -450,7 +412,6 @@ function initializeCharts() {
   });
 }
 
-// Update charts with new data
 function updateCharts(expensesData) {
   if (!categoryChart || !trendChart) {
     console.warn("Charts not initialized");
@@ -458,7 +419,6 @@ function updateCharts(expensesData) {
   }
 
   if (!expensesData || expensesData.length === 0) {
-    // No data state for charts
     categoryChart.data.labels = ["No expenses yet"];
     categoryChart.data.datasets[0].data = [1];
     categoryChart.data.datasets[0].backgroundColor = ["#faedcd"];
@@ -474,7 +434,6 @@ function updateCharts(expensesData) {
   trendChart.update();
 }
 
-// Update doughnut chart with category totals
 function updateCategoryChart(expenses) {
   const categoryTotals = {};
 
@@ -497,16 +456,12 @@ function updateCategoryChart(expenses) {
   ].slice(0, Object.keys(categoryTotals).length);
 }
 
-// Update cumulative spending line chart
 function updateCumulativeTrendChart(expenses) {
-  // Sort expenses oldest first for cumulative calculation
   const sortedExpenses = [...expenses].sort((a, b) => new Date(a.date) - new Date(b.date));
 
   const cumulativeData = [];
   const labels = [];
   let runningTotal = 0;
-
-  // Add starting point
   if (sortedExpenses.length > 0) {
     labels.push("Start");
     cumulativeData.push(0);
@@ -523,11 +478,9 @@ function updateCumulativeTrendChart(expenses) {
   trendChart.data.datasets[0].data = cumulativeData;
 }
 
-// Initialize charts on DOM content loaded
 document.addEventListener("DOMContentLoaded", () => {
   initializeCharts();
   
-  // Initialize chat event listeners after DOM is loaded
   if (chatTrigger) {
     chatTrigger.addEventListener('click', openChat);
   }
