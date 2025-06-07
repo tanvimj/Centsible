@@ -71,10 +71,7 @@
       </div>
     </div>
   </div>
-
-  <!-- Firebase SDK v10.12.1 (matching your main app) -->
   <script type="module">
-    // Import Firebase modules
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.1/firebase-app.js";
     import {
       getAuth,
@@ -88,7 +85,6 @@
       getDoc,
     } from "https://www.gstatic.com/firebasejs/10.12.1/firebase-firestore.js";
 
-    // Firebase config (same as your main app)
     const firebaseConfig = {
       apiKey: "AIzaSyCg9Hyp3egqKyb4YJCVHJDJcxFyYEvrroI",
       authDomain: "centsible-40125.firebaseapp.com",
@@ -99,12 +95,9 @@
       measurementId: "G-1JVNDTB627",
     };
 
-    // Initialize Firebase
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const db = getFirestore(app);
-
-    // Check authentication
     onAuthStateChanged(auth, (user) => {
       const loadingEl = document.getElementById('loading');
       const contentEl = document.getElementById('budget-content');
@@ -114,7 +107,6 @@
         loadingEl.style.display = 'none';
         contentEl.style.display = 'block';
         
-        // Auto-load existing budget
         loadBudget();
       } else {
         console.log("User not authenticated, redirecting...");
@@ -122,7 +114,6 @@
       }
     });
 
-    // Make functions global so they can be called from HTML
     window.addCategory = function() {
       const container = document.getElementById('category-list');
       const div = document.createElement('div');
@@ -232,16 +223,15 @@
               }
               calculateSummary();
             } else {
-              // Add default empty category if no categories exist
               addCategory();
             }
           } else {
             console.log("No budget plan found");
-            addCategory(); // Add default empty category
+            addCategory(); 
           }
         } else {
           console.log("No user document found");
-          addCategory(); // Add default empty category
+          addCategory(); 
         }
       } catch (error) {
         console.error("Error loading budget:", error);
