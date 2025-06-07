@@ -46,17 +46,7 @@ form.addEventListener('submit', async (e) => {
     }
     
     console.log("Redirecting now...");
-    
-    // Try different paths - uncomment the one that works for your structure:
-    
-    // If MainPage is in the same parent directory as your LoginSignup folder:
     window.location.href = "../MainPage/index.html";
-    
-    // If MainPage is in the root of your website:
-    // window.location.href = "/MainPage/index.html";
-    
-    // If MainPage is in the same directory as your current HTML file:
-    // window.location.href = "./MainPage/index.html";
     
   } catch (error) {
     alert(error.message);
