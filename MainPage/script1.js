@@ -9,7 +9,6 @@ class CentsibleChatbot {
             init() {
                 this.updateStatus('Connecting...', 'connecting');
                 
-                // Simulate connection attempt
                 setTimeout(() => {
                     this.testConnection();
                 }, 1000);
@@ -18,22 +17,18 @@ class CentsibleChatbot {
             }
 
             setupEventListeners() {
-                // Chat trigger button
                 document.getElementById('chat-trigger').addEventListener('click', () => {
                     this.toggleChat();
                 });
 
-                // Close chat button
                 document.getElementById('chat-close').addEventListener('click', () => {
                     this.closeChat();
                 });
 
-                // Send message
                 document.getElementById('chat-send').addEventListener('click', () => {
                     this.sendMessage();
                 });
 
-                // Enter key to send
                 document.getElementById('chat-input').addEventListener('keypress', (e) => {
                     if (e.key === 'Enter') {
                         this.sendMessage();
@@ -42,7 +37,6 @@ class CentsibleChatbot {
             }
 
             testConnection() {
-                // Simulate connection test
                 const startTime = Date.now();
                 
                 setTimeout(() => {
@@ -80,11 +74,9 @@ class CentsibleChatbot {
                 
                 if (!message) return;
 
-                // Add user message
                 this.addMessage(message, 'user');
                 input.value = '';
 
-                // Simulate bot response
                 setTimeout(() => {
                     const response = this.generateResponse(message);
                     this.addMessage(response, 'bot');
@@ -145,7 +137,6 @@ class CentsibleChatbot {
     } else if (message.includes('weekly') || message.includes('month')) {
         return `You can totally view trends over time 📆. Want me to generate a sample weekly breakdown?`;
     } else {
-        // Default generic reply
         const replies = [
             "Hmm, interesting! Want to talk expenses or savings?",
             "I’m not sure I got that. but hey, we can talk budgets any time!",
@@ -159,10 +150,8 @@ class CentsibleChatbot {
 
         }
 
-        // Initialize chatbot
         const chatbot = new CentsibleChatbot();
 
-        // Global functions for testing
         function testBotConnection() {
             chatbot.updateStatus('Testing connection...', 'connecting');
             chatbot.testConnection();
@@ -175,7 +164,6 @@ class CentsibleChatbot {
             }, 500);
         }
 
-        // Demo expense functionality
         let totalExpenses = 0;
         let categories = new Set();
 
@@ -191,12 +179,10 @@ class CentsibleChatbot {
                 document.getElementById('daily-total').textContent = `₹${totalExpenses}`;
                 document.getElementById('category-count').textContent = categories.size;
                 
-                // Clear form
                 document.getElementById('amount').value = '';
                 document.getElementById('category').value = '';
                 document.getElementById('mode').value = '';
                 
-                // Auto-open chat with confirmation
                 setTimeout(() => {
                     chatbot.addMessage(`Great! I've recorded your ₹${amount} expense in ${category}. Your daily total is now ₹${totalExpenses}.`, 'bot');
                     chatbot.toggleChat();
@@ -204,7 +190,6 @@ class CentsibleChatbot {
             }
         });
 
-        // Simulate some initial data
         setTimeout(() => {
             document.getElementById('integration-method').textContent = 'Custom WebSocket + REST API';
         }, 2000);
