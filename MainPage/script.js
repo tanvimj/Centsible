@@ -111,9 +111,9 @@ document.getElementById('budget')?.addEventListener('click', () => {
   const user = auth.currentUser;
   
   if (user) {
-    window.location.href = "/BudgetPage/index.html";
+    window.location.href = "https://tanvimj.github.io/Centsible/BudgetPage/index.html";
   } else {
-    window.location.href = "/LoginSignup/index.html";
+    window.location.href = "https://tanvimj.github.io/Centsible/LoginSignup/index.html";
   }
 });
 
