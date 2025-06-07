@@ -118,14 +118,15 @@ document.getElementById('budget')?.addEventListener('click', () => {
 });
 
 document.getElementById('budget')?.addEventListener('click', () => {
-  const unsubscribe = onAuthStateChanged(auth, (user) => {
-    if (user) {
-      window.location.href = "/BudgetPage/index.html";
-    } else {
-      window.location.href = "/LoginSignup/index.html";
-    }
-    unsubscribe();
-  });
+  const user = auth.currentUser;
+  
+  if (user) {
+    // Use the correct absolute GitHub Pages URL
+    window.location.href = "https://tanvimj.github.io/Centsible/BudgetPage/index.html";
+  } else {
+    // Use the correct absolute GitHub Pages URL for login
+    window.location.href = "https://tanvimj.github.io/Centsible/LoginSignup/index.html";
+  }
 });
 
 addExpenseBtn?.addEventListener("click", async () => {
