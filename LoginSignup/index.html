@@ -1,0 +1,50 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="icon" href="data:," />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&family=Quicksand:wght@300..700&display=swap"
+    rel="stylesheet"/>
+  <title>LogIn/SignUp</title>
+
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-analytics.js"></script>
+</head>
+<body>
+  <div>
+    <img src="bg1.png" class="bg1" />
+  </div>
+  <div class="inputs">
+    <p class="h2" id="welcome-text">Welcome.</p>
+    <form id="auth-form">
+      <input
+        id="email-input"
+        name="email"
+        type="email"
+        placeholder="Email"
+        required
+        class="input2"/>
+      <input class="input1"
+        id="password-input"
+        name="password"
+        type="password"
+        placeholder="Password"
+        required
+      />
+      <button class="btn1" id="action-button" type="submit">Sign Up</button>
+    </form>
+    <button class="btn2" id="switch-button">Or, log in.</button>
+  </div>
+
+  <!-- Your custom Firebase JS logic -->
+  <script type="module" src="app.js"></script>
+</body>
+</html>

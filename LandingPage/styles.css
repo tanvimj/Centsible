@@ -1,0 +1,192 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden; 
+    height: 100%; 
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    position: relative;
+}
+
+.bg1 {
+    width: 100vw;
+    height: 100vh;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.logo {
+    position: absolute;
+    top: 0%;
+    left: 2%;
+    height: 70px;
+}
+
+.navbar {
+    border-radius: 12px;
+    padding: 15px;
+    position: absolute;
+    top: 2%;
+    right: 5%;
+    width: 750px;
+    transform: scale(1.1);
+}
+
+.navbar ul {
+    list-style: none;
+    display: flex;
+    padding: 0;
+    margin: 0;
+    font-size: 16px;
+    font-weight: 550;
+    color: #d4a373;
+    justify-content: center;
+    text-align: center;
+}
+
+.navbar ul li {
+    height: 45px;
+    width: 130px;
+    margin-right: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;  
+    justify-content: center; 
+    transition: all 0.2s ease-in;
+    border-radius: 0.5em;
+}
+
+a{
+    text-decoration: none;
+    color: inherit;
+}
+
+
+.navbar ul li:hover {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: inset 2px 3px 6px rgb(5, 5, 5);
+}
+
+.headtxt{
+    position: absolute;
+    left: 6%;
+    top: 30%;
+    font-size: 30px;
+    line-height: 1.5;
+    font-weight: 500;
+    color: #9c6644;
+}
+
+.button2 {
+    width: 200px;
+    height: 50px;
+    transition: all 0.2s ease-in;
+    position: absolute;
+    top: 53%;
+    left: 5.5%;
+    overflow: hidden;
+    z-index: 1;
+    color: #090909;
+    cursor: pointer;
+    font-size: 18px;
+    border-radius: 0.5em;
+    background-color: transparent;
+    border: none;
+    text-align: left;
+    display: inline-flex; 
+    align-items: center;
+    padding-left: 10px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    color: #656d4a;
+    font-weight: 500;
+}
+
+.button2:active {
+    box-shadow: inset 2px 5px 10px rgb(5, 5, 5);
+}
+
+.button2:hover {
+    transition: transform 0.3s ease, box-shadow 0.3s ease; 
+    box-shadow: inset 2px 5px 10px rgb(5, 5, 5);
+}
+
+
+.icon1{
+    position: absolute;
+    height: 26px;
+    right: 1%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+span{
+    position: absolute;
+    top: 4.5%;
+    font-size: 22px;
+    color: #d4a373;
+    font-weight: 600;
+    left: 2.5%;
+}
+
+.hamburger {
+    display: none;
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    font-size: 28px;
+    cursor: pointer;
+}
+
+@media (max-width: 768px) {
+    .navbar {
+        position: fixed;
+        top: 0;
+        right: 2%;
+        background-color: #fefae0;
+        width: 100%;
+        height: 10vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        padding-top: 20px;
+        overflow-y: auto; 
+        transition: right 0.3s ease-in-out;
+        transform: translateX(100%);
+        overflow-y: hidden;
+    }
+
+    .navbar.show {
+        transform: translateX(0); 
+    }
+
+    .navbar ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        width: 50%;
+    }
+
+    .navbar ul li {
+        padding: 0 10px;
+        width: 100%;
+        margin: 4px;
+        text-align: center;
+        border-bottom: 1px solid #ddd;
+        cursor: pointer;
+        font-size: 15px;
+    }
+
+    .navbar ul li:last-child {
+        border-bottom: none;
+    }
+
+    .hamburger {
+        display: block;
+        z-index: 1000; 
+        top: 4.2%;
+        color: #d4a373;
+    }
+}
+
+  

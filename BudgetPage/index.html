@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&family=Quicksand:wght@300..700&display=swap"
+      rel="stylesheet"
+    /> 
+  <link rel="stylesheet" href="styles.css">
+  <title>Budget Planner</title>
+</head>
+<body>
+    <button id="back-btn" class="back-btn">← Back to Dashboard</button>  
+  <div class="container">
+    <h1>Budget Planner</h1>
+    
+    <div id="loading" class="loading">
+<div class="loader">
+  <div class="loading-text">
+    Loading<span class="dot">.</span><span class="dot">.</span
+    ><span class="dot">.</span>
+  </div>
+  <div class="loading-bar-background">
+    <div class="loading-bar">
+      <div class="white-bars-container">
+        <div class="white-bar"></div>
+        <div class="white-bar"></div>
+        <div class="white-bar"></div>
+        <div class="white-bar"></div>
+        <div class="white-bar"></div>
+        <div class="white-bar"></div>
+        <div class="white-bar"></div>
+        <div class="white-bar"></div>
+        <div class="white-bar"></div>
+        <div class="white-bar"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    </div>
+    
+    <div id="budget-content" style="display: none;">
+      <div class="budget-form">
+        <label for="income">Monthly Income (₹):</label>
+        <input type="number" id="income" placeholder="Enter your monthly income" />
+
+        <h2>Budget Categories</h2>
+        <div class="category-list" id="category-list">
+          <div class="category-item">
+            <input type="text" placeholder="Category (e.g. Food, Transport)" class="category-name" />
+            <input type="number" placeholder="Budget Amount" class="category-amount" />
+            <button type="button" class="remove-btn" onclick="removeCategory(this)">Remove</button>
+          </div>
+        </div>
+        
+        <div class="button-group">
+          <button type="button" onclick="addCategory()"> Add Category</button>
+          <button type="button" onclick="saveBudget()"> Save Budget</button>
+          <button type="button" onclick="loadBudget()"> Load Budget</button>
+          <button type="button" onclick="calculateSummary()">Calculate Summary</button>
+        </div>
+      </div>
+      
+      <div id="budget-summary" class="summary" style="display: none;">
+        <h3>Budget Summary</h3>
+        <div id="summary-content"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Firebase SDK v10.12.1 (matching your main app) -->
+  <script type="module">
+    // Import Firebase modules
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.1/firebase-app.js";
+    import {
+      getAuth,
+      onAuthStateChanged,
+    } from "https://www.gstatic.com/firebasejs/10.12.1/firebase-auth.js";
+    import {
+      getFirestore,
+      collection,
+      doc,
+      setDoc,
+      getDoc,
+    } from "https://www.gstatic.com/firebasejs/10.12.1/firebase-firestore.js";
+
+    // Firebase config (same as your main app)
+    const firebaseConfig = {
+      apiKey: "AIzaSyCg9Hyp3egqKyb4YJCVHJDJcxFyYEvrroI",
+      authDomain: "centsible-40125.firebaseapp.com",
+      projectId: "centsible-40125",
+      storageBucket: "centsible-40125.appspot.com",
+      messagingSenderId: "665505386105",
+      appId: "1:665505386105:web:cbaeeaf0584fde180a8ea8",
+      measurementId: "G-1JVNDTB627",
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    // Check authentication
+    onAuthStateChanged(auth, (user) => {
+      const loadingEl = document.getElementById('loading');
+      const contentEl = document.getElementById('budget-content');
+      
+      if (user) {
+        console.log("User authenticated:", user.email);
+        loadingEl.style.display = 'none';
+        contentEl.style.display = 'block';
+        
+        // Auto-load existing budget
+        loadBudget();
+      } else {
+        console.log("User not authenticated, redirecting...");
+        window.location.href = "../LoginSignup/index.html";
+      }
+    });
+
+    // Make functions global so they can be called from HTML
+    window.addCategory = function() {
+      const container = document.getElementById('category-list');
+      const div = document.createElement('div');
+      div.classList.add('category-item');
+      div.innerHTML = `
+        <input type="text" placeholder="Category" class="category-name" />
+        <input type="number" placeholder="Amount" class="category-amount" />
+        <button type="button" class="remove-btn" onclick="removeCategory(this)">Remove</button>
+      `;
+      container.appendChild(div);
+    };
+
+    window.removeCategory = function(button) {
+      const categoryItem = button.parentElement;
+      if (document.querySelectorAll('.category-item').length > 1) {
+        categoryItem.remove();
+      } else {
+        alert("You must have at least one category!");
+      }
+    };
+
+    window.getBudgetData = function() {
+      const income = parseFloat(document.getElementById('income').value) || 0;
+      const categoryNames = document.querySelectorAll('.category-name');
+      const categoryAmounts = document.querySelectorAll('.category-amount');
+
+      const categories = {};
+      for (let i = 0; i < categoryNames.length; i++) {
+        const name = categoryNames[i].value.trim();
+        const amount = parseFloat(categoryAmounts[i].value) || 0;
+        if (name && amount > 0) {
+          categories[name] = amount;
+        }
+      }
+
+      return { income, categories };
+    };
+
+    window.saveBudget = async function() {
+      const user = auth.currentUser;
+      if (!user) {
+        alert("Please log in to save budget");
+        return;
+      }
+
+      const { income, categories } = getBudgetData();
+      
+      if (income <= 0) {
+        alert("Please enter a valid income amount");
+        return;
+      }
+
+      if (Object.keys(categories).length === 0) {
+        alert("Please add at least one category with an amount");
+        return;
+      }
+
+      try {
+        const userDocRef = doc(db, "users", user.uid);
+        await setDoc(userDocRef, {
+          budgetPlan: {
+            income: income,
+            categories: categories,
+            updatedAt: new Date().toISOString()
+          }
+        }, { merge: true });
+        
+        alert("Budget saved successfully!");
+        calculateSummary();
+      } catch (error) {
+        console.error("Error saving budget:", error);
+        alert("Error saving budget: " + error.message);
+      }
+    };
+
+    window.loadBudget = async function() {
+      const user = auth.currentUser;
+      if (!user) {
+        alert("Please log in to load budget");
+        return;
+      }
+
+      try {
+        const userDocRef = doc(db, "users", user.uid);
+        const docSnap = await getDoc(userDocRef);
+        
+        if (docSnap.exists()) {
+          const data = docSnap.data();
+          const budgetPlan = data.budgetPlan;
+          
+          if (budgetPlan) {
+            document.getElementById('income').value = budgetPlan.income || '';
+            const container = document.getElementById('category-list');
+            container.innerHTML = ''; // Clear existing categories
+
+            const categories = budgetPlan.categories || {};
+            if (Object.keys(categories).length > 0) {
+              for (const [name, amount] of Object.entries(categories)) {
+                const div = document.createElement('div');
+                div.classList.add('category-item');
+                div.innerHTML = `
+                  <input type="text" value="${name}" class="category-name" />
+                  <input type="number" value="${amount}" class="category-amount" />
+                  <button type="button" class="remove-btn" onclick="removeCategory(this)">Remove</button>
+                `;
+                container.appendChild(div);
+              }
+              calculateSummary();
+            } else {
+              // Add default empty category if no categories exist
+              addCategory();
+            }
+          } else {
+            console.log("No budget plan found");
+            addCategory(); // Add default empty category
+          }
+        } else {
+          console.log("No user document found");
+          addCategory(); // Add default empty category
+        }
+      } catch (error) {
+        console.error("Error loading budget:", error);
+        alert("Error loading budget: " + error.message);
+      }
+    };
+
+    window.calculateSummary = function() {
+      const { income, categories } = getBudgetData();
+      const summaryEl = document.getElementById('budget-summary');
+      const summaryContent = document.getElementById('summary-content');
+      
+      if (income <= 0) {
+        summaryEl.style.display = 'none';
+        return;
+      }
+
+      const totalBudgeted = Object.values(categories).reduce((sum, amount) => sum + amount, 0);
+      const remaining = income - totalBudgeted;
+      
+      let summaryHTML = `
+        <p><strong>Monthly Income:</strong> ₹${income.toLocaleString('en-IN')}</p>
+        <p><strong>Total Budgeted:</strong> ₹${totalBudgeted.toLocaleString('en-IN')}</p>
+        <p><strong>Remaining:</strong> <span style="color: ${remaining >= 0 ? 'green' : 'red'}">₹${remaining.toLocaleString('en-IN')}</span></p>
+      `;
+      
+      if (Object.keys(categories).length > 0) {
+        summaryHTML += '<h4>Category Breakdown:</h4>';
+        for (const [name, amount] of Object.entries(categories)) {
+          const percentage = ((amount / income) * 100).toFixed(1);
+          summaryHTML += `<p>${name}: ₹${amount.toLocaleString('en-IN')} (${percentage}%)</p>`;
+        }
+      }
+      
+      if (remaining < 0) {
+        summaryHTML += '<p style="color: red; font-weight: bold;">⚠️ You are over budget!</p>';
+      }
+      
+      summaryContent.innerHTML = summaryHTML;
+      summaryEl.style.display = 'block';
+    };
+    document.querySelector('#back-btn').addEventListener('click', () => {
+window.location.href = "../../MainPage/index.html";
+});
+
+  </script>
+</body>
+</html>

@@ -1,0 +1,152 @@
+body{
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background-color: #FEFAE1;
+    height: auto;
+}
+
+
+.ourStory{
+    box-shadow: inset 2px 3px 6px rgb(5, 5, 5);
+    position: absolute;
+    top: 5%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    padding: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    background-image: url(bg2.png);
+}
+
+.ourStory p{
+    font-weight: 500;
+}
+
+.missionVision{
+    box-shadow: inset 2px 3px 6px rgb(5, 5, 5);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    padding: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    background-image: url(bg2.png);
+}
+
+.missionVision p{
+    font-weight: 500;
+}
+
+.technology{
+    box-shadow: inset 2px 3px 6px rgb(5, 5, 5);
+    position: absolute;
+    top: 98%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    padding: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    background-image: url(bg2.png);
+}
+
+.technology p{
+    font-weight: 500;
+}
+
+.serve{
+    box-shadow: inset 2px 3px 6px rgb(5, 5, 5);
+    position: absolute;
+    top: 148%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    padding: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    background-image: url(bg2.png);
+}
+
+.serve p{
+    font-weight: 500;
+}
+
+.commitment{
+    box-shadow: inset 2px 3px 6px rgb(5, 5, 5);
+    position: absolute;
+    top: 183%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    padding: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    background-image: url(bg2.png);
+}
+
+.commitment p{
+    font-weight: 500;
+}
+
+.contact{
+    box-shadow: inset 2px 3px 6px rgb(5, 5, 5);
+    position: absolute;
+    top: 218%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    padding: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    background-image: url(bg2.png);
+}
+
+.contact p{
+    font-weight: 500;
+}
+
+@media screen and (max-width: 600px) {
+  .ourStory,
+  .missionVision,
+  .technology,
+  .serve,
+  .commitment,
+  .contact {
+    width: 80%;
+    padding: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 14px;
+  }
+
+  .ourStory p,
+  .missionVision p,
+  .technology p,
+  .serve p,
+  .commitment p,
+  .contact p {
+    font-size: 14px;
+    text-align: center;
+  }
+
+  .ourStory { top: 5%; }
+  .missionVision { top: 100%; }
+  .technology { top: 197%; }
+  .serve { top: 301.5%; }
+  .commitment { top: 361%; }
+  .contact { top: 418.7%; }
+}

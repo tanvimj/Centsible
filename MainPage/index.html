@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="chatbot.css">
+    <!-- FullCalendar CSS -->
+<link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet" />
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&family=Quicksand:wght@300..700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="icon" href="data:," />
+    <title>Centsible</title>
+    <style>
+      /* Basic styling for chat interface */
+      #centsi-container {
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 20px;
+        margin: 20px 0;
+        max-width: 600px;
+      }
+      
+      .chat-window {
+        height: 300px;
+        overflow-y: auto;
+        border: 1px solid #eee;
+        padding: 10px;
+        margin-bottom: 10px;
+        background-color: #f9f9f9;
+        border-radius: 4px;
+      }
+      
+      .message {
+        margin: 10px 0;
+        padding: 8px 12px;
+        border-radius: 8px;
+        max-width: 80%;
+      }
+      
+      .message.user {
+        background-color: #007bff;
+        color: white;
+        margin-left: auto;
+        text-align: right;
+      }
+      
+      .message.centsi {
+        background-color: #e9ecef;
+        color: #333;
+        margin-right: auto;
+      }
+      
+      #chat-form {
+        display: flex;
+        gap: 10px;
+      }
+      
+      #chat-input {
+        flex: 1;
+        padding: 8px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+      }
+      
+      .btnsmol {
+        padding: 8px 16px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+      
+      .btnsmol:hover {
+        background-color: #0056b3;
+      }
+      
+      .loading {
+        color: #666;
+        font-style: italic;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <span class="name">Centsible</span>
+          <div class="hamburger" onclick="toggleMenu()">☰</div>
+      <nav class="navbar">
+        <div class="boxes">
+        <div class="box1">Monthly Income</div>
+        <div class="box2">Monthly Outcome</div>
+        <div class="box3">Monthly Savings</div>
+      </div>
+    <button class="btnbgt" id="budget">Budget Planner</button>
+        <ul>
+          <li>Analytics</li>
+          <li>Reports</li>
+          <li>Profile</li>
+          <li id="logout-btn">Log Out</li>
+        </ul>
+      </nav>
+    </header>
+
+    <div class="mainCont">
+
+      <section class="add-expense-form">
+        <h2>Add an Expense</h2>
+        <input type="number" id="amount" placeholder="Enter amount" />
+        <input type="text" id="category" placeholder="Enter category" />
+        <input type="text" id="mode" placeholder="Enter payment mode" />
+        <button class="btn" id="add-expense">Add Expense</button>
+        <button class="btn" id="show-table-btn">Show Expenses Table</button>
+      </section>
+      <div class="charts-container">
+  <div class="chart-wrapper">
+    <div class="chart-title">Expenses by Category</div>
+    <canvas id="categoryChart" class="chart-canvas"></canvas>
+  </div>
+  <div class="chart-wrapper">
+    <div class="chart-title">Daily Spending Trend</div>
+    <canvas id="trendChart" class="chart-canvas"></canvas>
+  </div>
+</div>
+
+      <div class="table-container">
+        <button id="close-table-btn" class="close-btn">&times;</button>
+        <table id="expenses-table">
+          <thead>
+            <tr>
+              <th>Category</th>
+              <th>Amount (₹)</th>
+              <th>Date</th>
+              <th>Mode</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="expenses-body"></tbody>
+        </table>
+      </div>
+    </div>
+    <div class="chatbot-info">
+            <h3>Chatbot Integration Status</h3>
+            <div class="chatbot-status">
+                <div class="status-dot" id="bot-status"></div>
+                <span id="status-text">Initializing...</span>
+            </div>
+            <p><strong>Bot Response Time:</strong> <span id="response-time">~1-2 seconds</span></p>
+            <div>
+                <button class="btntest" onclick="testBotConnection()">Test Bot Connection</button>
+                <button class="btntest" onclick="reinitializeBot()">Reinitialize Bot</button>
+            </div>
+        </div>
+        <div>
+          <button class="floating-chat-btn" id="floating-chat-btn">
+      💬 &nbsp; Centsi
+    </button>
+<div class="chat-cont">
+  <p>Chat with our AI, <br> Centsi</p>
+  <button class="custom-chat-trigger" id="chat-trigger"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#774b18"><path d="M880-80 720-240H320q-33 0-56.5-23.5T240-320v-40h440q33 0 56.5-23.5T760-440v-280h40q33 0 56.5 23.5T880-640v560ZM160-473l47-47h393v-280H160v327ZM80-280v-520q0-33 23.5-56.5T160-880h440q33 0 56.5 23.5T680-800v280q0 33-23.5 56.5T600-440H240L80-280Zm80-240v-280 280Z"/></svg></button>
+  <h6>P.S. It is still developing!</h6>
+</div>
+          </div>
+
+    <!-- Demo Chat Window -->
+    <div class="demo-chat" id="chat-window">
+        <div class="chat-header">
+            <span>Centsible Assistant</span>
+            <button class="chat-close" id="chat-close">×</button>
+        </div>
+        <div class="chat-messages" id="chat-messages">
+            <div class="chat-message bot">
+                Hi! I'm your Centsible assistant. I can help you track expenses, analyze spending patterns, and provide financial tips. How can I help you today?
+            </div>
+        </div>
+        <div class="chat-input-area">
+            <input type="text" class="chat-input" id="chat-input" placeholder="Type your message...">
+            <button class="chat-send" id="chat-send">➤</button>
+        </div>
+    <script type="module" src="./firebase.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script type="module" src="script.js"></script>
+<!-- Botpress Chat Widget -->
+<script src="https://cdn.botpress.cloud/webchat/v3"></script>
+<script src="script1.js"></script>
+  </body>
+</html>
