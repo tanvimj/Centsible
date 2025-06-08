@@ -173,6 +173,7 @@ input {
 }
 
 .table-container {
+  z-index:83920;
   position: absolute;
   top: 3%;
   left: 5%;
